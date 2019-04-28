@@ -13,8 +13,8 @@
           :remote-method="remoteMethod"
           :loading="loading">
         <el-option
-          v-for="(headlines, i) in userSearchHeadlines"
-          :key="i"
+          v-for="(headlines, index) in userSearchHeadlines"
+          :key="index"
           :label="headlines"
           :value="headlines">
         </el-option>
@@ -25,7 +25,7 @@
         <el-button type="primary" @click="fetchUserSearchNews">Show results</el-button>
     </div>
     
-    <!-- <p>{{userSearchvalue}}</p> -->
+    <p>{{newsHeadlines}}</p>
     <div class="flexWrapper" style="margin: 5% 0 0 0">
       <el-card class="box-card" v-for="(cards, index) in newsHeadlines">
         <img :src="imageHref[index]" style="width: 100%; height: 100%; min-height: 100%" alt="Error loading image">
@@ -70,7 +70,7 @@ export default {
         imageHrefTemp: [],
         newsLinkHrefTemp: [],
         // ends here
-        test: 0,
+        // test: 0,
       }
     },
   methods: {
@@ -96,7 +96,7 @@ export default {
             this.$api.get('https://newsapi.org/v2/everything?q=' + query +'&sortBy=publishedAt&page=1&language=en&apiKey=68382f09d14c48488f2d573ae9158d74')
             .then(response => {
               
-              console.log(response);
+              // console.log(response);
               for (let i = 0; i < response.data.articles.length; i++) {
                 this.userSearchHeadlines.push(response.data.articles[i].title);
                 this.imageHrefTemp.push(response.data.articles[i].urlToImage);
@@ -147,7 +147,7 @@ export default {
       this.searchPageNumber++;
       this.$api.get('https://newsapi.org/v2/everything?q=' + this.userSearchvalue +'&sortBy=publishedAt&page=' + this.searchPageNumber + '&language=en&apiKey=68382f09d14c48488f2d573ae9158d74') 
       .then(response => {
-      console.log(response);
+      // console.log(response);
       for (let i = 0; i < response.data.articles.length; i++) {
         this.newsHeadlines.push(response.data.articles[i].title);
         this.imageHref.push(response.data.articles[i].urlToImage);
@@ -163,7 +163,7 @@ export default {
         // $state.reset();
       }
       
-      console.log($state);
+      // console.log($state);
     })
     .catch(e => {
       // $state.error();
@@ -188,7 +188,7 @@ export default {
       
       
       $state.loaded();
-      console.log($state);
+      // console.log($state);
     })
     .catch(e => {
       console.log(e);
@@ -218,7 +218,7 @@ export default {
         // $state.reset();
       }
       
-      console.log($state);
+      // console.log($state);
     })
     .catch(e => {
       // $state.error();
@@ -226,16 +226,19 @@ export default {
       console.log(e);
     })
     .then(function () {
-      $state.loaded();
-      //to set the scroll state to loaded
+       //to set the scroll state to loaded
     // always executed
+      $state.loaded();
+     
     });
   }, 
   fetchUserSearchNews () {
+    // to take the first 20 values from temporary variables
     this.newsHeadlines = this.userSearchHeadlines.slice(0, 20); 
     this.imageHref = this.imageHrefTemp.slice(0, 20);
     this.newsLinkHref = this.newsLinkHrefTemp.slice(0, 20); 
     this.userSearchHeadlines = [];
+    // to fetch result till 5 pages with search query
     this.pageNumber = -3;
     this.searchPageNumber = 1;
   }
